@@ -7,6 +7,8 @@
 This is a boilerplate application for use across **Developers** based on React.
 
 ### About this repository
+This application is about the **"Music for the Mind"**
+Our application Identify a user's emotional state from a picture or video, and recommend suitable music to improve their mood.
 
 The code has been set up with the following items in place:
 
