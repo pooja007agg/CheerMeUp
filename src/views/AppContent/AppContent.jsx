@@ -18,15 +18,7 @@ const AppContent = ({ routes }) => {
 
     return (
         <Fragment>
-            {location.pathname !== '/login' &&
-            location.pathname !== '/verify' &&
-            location.pathname !== '/forgot-password' &&
-            location.pathname !== '/set-password' &&
-            location.pathname !== undefined &&
-            location.pathname !== '/' ? (
-                <AppBarComponent />
-            ) : null}
-            {/* <CustomizedSnackbars /> */}
+            <AppBarComponent />
             <Routes>
                 {routes.map((route) => (
                     <Route key={route.id} path={route.path} element={<route.component />} />

@@ -1,5 +1,6 @@
 # Getting Started
 
+<<<<<<< HEAD
 <p align="center">
   <img src="./src/assets/images/React-boilerplates.png" width="100%" alt="React Js Image">
 </p>
@@ -7,6 +8,11 @@
 This is a boilerplate application for use across **Developers** based on React.
 
 ### About this repository
+=======
+### About this repository
+This application is about the **"Music for the Mind"**
+Our application Identify a user's emotional state from a picture or video, and recommend suitable music to improve their mood.
+>>>>>>> 2944dc20050d100bca5a9fa7e5e4fe8ebaf94110
 
 The code has been set up with the following items in place:
 
