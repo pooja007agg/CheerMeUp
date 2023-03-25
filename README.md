@@ -29,7 +29,7 @@ The code has been set up with the following items in place:
 
 Clone the Repo
 
-### `git clone https://github.com/sufyan468/reactjs-boilerplate-material-ui.git`
+### `git clone https://github.com/pooja007agg/Music-for-the-Mind.git`
 
 After cloning the repo | In the project directory, you can run to install **Node Modules** :
 
