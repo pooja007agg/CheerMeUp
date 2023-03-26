@@ -24,7 +24,6 @@ const AppContent = ({ routes }) => {
                     <Route key={route.id} path={route.path} element={<route.component />} />
                 ))}
             </Routes>
-            {location.pathname !== '/login' && <Footer />}
         </Fragment>
     );
 };

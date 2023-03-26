@@ -17,6 +17,9 @@ import 'react-jinke-music-player/assets/index.css';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import './style.css';
 
+const ACCESS_TOKEN =
+    'BQB34YnMAEVeH7IaZb52tM8H9t-1BY578k-wGqi3K30I1AKQw41xo3Lc5zVCXaCyN5sj3jDTVCsSURCsXcpmWYjPAvKdEbmN1ntMsLFGrkS1JwmdcD2hE_9ZENM_ub9qYt28k1Qn9Ma3yIs7FMmLyz_mrvwH9aHKB7zYRd8_UqHuyyCHjmXgU1MquMT2oBJxXwyjVAVJZbuD91DwZubiwrsu';
+
 const Queue = () => {
     const [faceExpression, setFaceExpression] = useState([]);
     const [songsList, setSongsList] = useState([]);
@@ -76,7 +79,7 @@ const Queue = () => {
 
     const handleSpotifyCall = (expression) => {
         const spotifyAPI = new SpotifyWebApi();
-        spotifyAPI.setAccessToken(process.env.ACCESS_TOKEN);
+        spotifyAPI.setAccessToken(ACCESS_TOKEN);
         let prev = null;
 
         prev = spotifyAPI.searchTracks(expression);
