@@ -72,59 +72,15 @@ export default function PrimarySearchAppBar({ children, to, ...props }) {
         <Box sx={{ flexGrow: 1, background: '#FFFFFF' }}>
             <AppBar position="static" sx={{ boxShadow: 'none', background: '#FFFFFF' }}>
                 <Container maxwidth="sm">
-                    <Toolbar className="nvabar">
-                        <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'block', sm: 'block' } }}>
-                            <NavLink to="/">
-                                {/* <img
-                                    src="https://images.squarespace-cdn.com/content/v1/5f355f3755ae87135c46df17/1597335930564-DCILTFVFCJHOXP5R1CV6/consuli_logo.png?format=1500w"
-                                    alt={APP_TITLE}
-                                    className="AppLogo"
-                                /> */}
-                                <h2>    
-                                    Music on my mind
-                                </h2>
-                            </NavLink>
-                        </Typography>
-
-                        <Box sx={{ flexGrow: 1 }} />
-                        {/* <Box
-                            sx={{ display: { xs: 'none', md: 'flex' } }}
-                            style={{ height: '76px', alignItems: 'center' }}
+                    <Toolbar className="nvabar" sx={{ justifyContent: 'center' }}>
+                        <Typography
+                            variant="h3"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'block', sm: 'block', color: 'black', padding: 20 } }}
                         >
-                            <li className="nav-link">
-                                <NavLink to="/queue">Queue</NavLink>
-                            </li>
-                            <li className="nav-link">
-                                <NavLink to="/members">Members</NavLink>
-                            </li>
-                            <li className="nav-link">
-                                <NavLink to="/questions">Questions</NavLink>
-                            </li>
-                            <li className="nav-link">
-                                <NavLink to="/offers">Offers</NavLink>
-                            </li>
-                            <li className="nav-link">
-                                <NavLink to="/surveys">Surveys</NavLink>
-                            </li>
-                            <li className="nav-link">
-                                <NavLink to="/settings">Settings</NavLink>
-                            </li>
-                            <li className="nav-link">
-                                <NavLink to="/log-out">Log Out</NavLink>
-                            </li>
-                        </Box> */}
-                        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                            <IconButton
-                                size="large"
-                                aria-label="show more"
-                                aria-controls={mobileMenuId}
-                                aria-haspopup="true"
-                                onClick={handleMobileMenuOpen}
-                                sx={{ color: 'info' }}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                        </Box>
+                            Music on my mind
+                        </Typography>
                     </Toolbar>
                 </Container>
             </AppBar>
