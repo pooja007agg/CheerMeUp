@@ -19,11 +19,11 @@ const AppContent = ({ routes }) => {
     return (
         <Fragment>
             <AppBarComponent />
-            <Routes>
-                {routes.map((route) => (
-                    <Route key={route.id} path={route.path} element={<route.component />} />
-                ))}
-            </Routes>
+                <Routes>
+                    {routes.map((route) => (
+                        <Route key={route.id} path={route.path} element={<route.component />} />
+                    ))}
+                </Routes>
         </Fragment>
     );
 };

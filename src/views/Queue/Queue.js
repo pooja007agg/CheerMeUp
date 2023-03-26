@@ -125,13 +125,17 @@ const Queue = () => {
             return 'yellow';
         } else if (face === 'angry') {
             return 'red';
+        } else if (face === 'fearful') {
+            return 'orange';
+        } else if (face === 'surprised') {
+            return 'blue';
         } else {
             return 'white';
         }
     };
 
     return (
-        <>
+        <div>
             <Container sx={{ height: '100vh', display: 'flex' }}>
                 <div>
                     <Card
@@ -152,7 +156,7 @@ const Queue = () => {
                                 autoPlay
                                 crossOrigin="anonymous"
                                 audio={false}
-                                height={400}
+                                height={420}
                                 ref={webcamRef}
                                 width={400}
                             ></video>
@@ -199,7 +203,7 @@ const Queue = () => {
                     </div>
                 </Card>
             </Container>
-        </>
+        </div>
     );
 };
 
