@@ -76,7 +76,10 @@ const Queue = () => {
 
     const handleSpotifyCall = (expression) => {
         const spotifyAPI = new SpotifyWebApi();
-        spotifyAPI.setAccessToken(process.env.ACCESS_TOKEN);
+        console.log(process.env);
+        spotifyAPI.setAccessToken(
+            'BQA8V592IxdmmdpiYI7IfuwnBpy0Z4mLHYbHxopAdcuOtTTDZZgtO0dupZLDu8JEO5svKZaQY4oMPLOhWqsrNVjh1kmofKJ47b3tbESEb9MCeMkCfpv7yAm67FVdWlsk9uAb4KZ6kJauI2lFkTde37LMEAGSk-J6six0lp3TA5kl_13vBE-UEAAxr1ukWCWMvva62BCH8w4iFo7gtgTyCPGv',
+        );
         let prev = null;
 
         prev = spotifyAPI.searchTracks(expression);
@@ -115,6 +118,18 @@ const Queue = () => {
         setPlayingIndex(index);
     };
 
+    const getColor = (face) => {
+        if (face === 'happy') {
+            return 'green';
+        } else if (face === 'sad') {
+            return 'yellow';
+        } else if (face === 'angry') {
+            return 'red';
+        } else {
+            return 'white';
+        }
+    };
+
     return (
         <>
             <Container sx={{ height: '100vh', display: 'flex' }}>
@@ -125,9 +140,10 @@ const Queue = () => {
                             height: 100,
                             marginTop: 20,
                             padding: 10,
+                            backgroundColor: getColor(faceExpression),
                         }}
                     >
-                        <h3>Your current Mood</h3>
+                        <h3>Your current mood</h3>
                         <h2>{faceExpression}</h2>
                     </Card>
                     <Card className="card">
@@ -165,7 +181,7 @@ const Queue = () => {
                         justifyContent: 'center',
                     }}
                 >
-                    <h2>Music According to your current mood </h2>
+                    <h2>Music according to your current mood </h2>
                     <div>
                         {songsList?.length > 0 && playingIndex !== null && (
                             <ReactJkMusicPlayer
