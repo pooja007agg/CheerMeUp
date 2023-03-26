@@ -1,41 +1,31 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Typography, Container, Card, Button } from '@mui/material';
+import {
+    Typography,
+    Container,
+    Card,
+    Button,
+    ListItemButton,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+} from '@mui/material';
 import * as faceapi from 'face-api.js';
 import SpotifyWebApi from 'spotify-web-api-js';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-
+import ReactJkMusicPlayer from 'react-jinke-music-player';
+import 'react-jinke-music-player/assets/index.css';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import './style.css';
-import { Label } from '@mui/icons-material';
-const videoConstraints = {
-    width: 400,
-    height: 400,
-    facingMode: 'user',
-};
 
-const Queue = (props) => {
-    const canvasRef = useRef();
+const Queue = () => {
     const [faceExpression, setFaceExpression] = useState([]);
     const [songsList, setSongsList] = useState([]);
-    const [audio, setAudio] = useState(null);
-    const [audioId, setAudioId] = useState(null);
+    const [playingIndex, setPlayingIndex] = useState(null);
 
-    const [playing, setPlaying] = useState(false);
-
-    const toggle = () => setPlaying(!playing);
-
-    useEffect(() => {
-        playing ? audio?.play() : audio?.pause();
-    }, [playing]);
-    // const [faceDrawing, setFaceDrawing] = useState([]);
     const webcamRef = useRef();
-    // const picturRef = useRef();
     let intervalId = null;
     let faceDrawings = [];
+
     useEffect(() => {
         startVideo();
         webcamRef && loadModels();
@@ -76,33 +66,33 @@ const Queue = (props) => {
 
     const faceDetection = async () => {
         intervalId = setInterval(async () => {
-            const canvas = faceapi.createCanvas(webcamRef.current);
-
             const detections = await faceapi
                 .detectAllFaces(webcamRef.current, new faceapi.TinyFaceDetectorOptions())
                 .withFaceExpressions()
                 .withAgeAndGender();
-            // if (detections?.length > 0) {
             showFaceDetectionData(detections);
-            // }
         }, 1000);
     };
 
     const handleSpotifyCall = (expression) => {
         const spotifyAPI = new SpotifyWebApi();
-        spotifyAPI.setAccessToken(
-            'BQA3fJSgaKKuXv0nC92vZ3s5qFYS-NwUC-QWD2hrLQAxJzqAWi--EDf4bgbA12d_Zl3O_3GI8QophxDfyEp1VPs_3SwP6rbzBQOFy0V4WQg6eEjB6KKSTbv--iMd1lNCNWlSHYNMuVTmxS9R_Gc3AJtS52XOXpriHJ1HoBWEgdiKRyW0SFK2FXXozk9U9XAuzQc2NGqn7Qj_GY5AdmbVuPJx',
-        );
-        // spotifyAPI.setPromiseImplementation(Q);
+        spotifyAPI.setAccessToken(process.env.ACCESS_TOKEN);
         let prev = null;
 
-        prev = spotifyAPI.searchTracks('expression');
+        prev = spotifyAPI.searchTracks(expression);
         prev.then(
             function (data) {
-                // clean the promise so it doesn't call abort
                 prev = null;
-                setSongsList(data?.tracks?.items);
-                // ...render list of search results...
+                const updatedList = data?.tracks?.items?.map((song) => {
+                    return {
+                        name: song?.name,
+                        musicSrc: song?.preview_url,
+                        cover: song?.album?.images?.[2]?.url,
+                        singer: song?.artists[0]?.name,
+                        ...song,
+                    };
+                });
+                setSongsList(updatedList);
             },
             function (err) {
                 console.error(err);
@@ -111,13 +101,8 @@ const Queue = (props) => {
     };
 
     const playSong = (id) => {
-        console.log(id);
-        const songURL = songsList?.find((song) => song?.id === id);
-        setAudioId(id);
-        toggle();
-        setAudio(null);
-        setAudio(new Audio(songURL?.preview_url));
-        
+        const index = songsList?.findIndex((song) => song?.id === id);
+        setPlayingIndex(index);
     };
 
     const captureFaceExpression = () => {
@@ -126,38 +111,14 @@ const Queue = (props) => {
         }
     };
 
+    const handlePlayingIndex = (index) => {
+        setPlayingIndex(index);
+    };
+
     return (
         <>
             <Container sx={{ height: '100vh', display: 'flex' }}>
                 <div>
-                    <Card className="card">
-                        <div>
-                            <div>
-                                <p>Are you happy, sad or neutral?</p>
-                            </div>
-                            <video
-                                autoPlay
-                                crossOrigin="anonymous"
-                                audio={false}
-                                height={400}
-                                ref={webcamRef}
-                                width={400}
-                            ></video>
-                            {/* <canvas ref={canvasRef} width="240" height="250" /> */}
-                        </div>
-                        <div>
-                            <Button
-                                variant="contained"
-                                onClick={(e) => {
-                                    // e.preventDefault();
-                                    captureFaceExpression();
-                                }}
-                                className="btn btn-danger button"
-                            >
-                                Capture Your Mood
-                            </Button>
-                        </div>
-                    </Card>
                     <Card
                         style={{
                             width: 400,
@@ -166,8 +127,31 @@ const Queue = (props) => {
                             padding: 10,
                         }}
                     >
-                        <h3>Your current Expression :</h3>
-                        <h2> {faceExpression}</h2>
+                        <h3>Your current Mood</h3>
+                        <h2>{faceExpression}</h2>
+                    </Card>
+                    <Card className="card">
+                        <div>
+                            <video
+                                autoPlay
+                                crossOrigin="anonymous"
+                                audio={false}
+                                height={400}
+                                ref={webcamRef}
+                                width={400}
+                            ></video>
+                        </div>
+                        <div>
+                            <Button
+                                variant="contained"
+                                onClick={(e) => {
+                                    captureFaceExpression();
+                                }}
+                                className="btn btn-danger button"
+                            >
+                                Capture Your Mood
+                            </Button>
+                        </div>
                     </Card>
                 </div>
                 <Card
@@ -181,18 +165,32 @@ const Queue = (props) => {
                         justifyContent: 'center',
                     }}
                 >
-                    <h2>Songs According to you current expression: </h2>
-                    <div>{songsList?.length > 0 && <SongsList songList={songsList} playSong={playSong} />}</div>
+                    <h2>Music According to your current mood </h2>
+                    <div>
+                        {songsList?.length > 0 && playingIndex !== null && (
+                            <ReactJkMusicPlayer
+                                audioLists={songsList}
+                                mode={'full'}
+                                playIndex={playingIndex}
+                                onPlayIndexChange={handlePlayingIndex}
+                            />
+                        )}
+                    </div>
+                    <div>
+                        {songsList?.length > 0 && (
+                            <SongsList songList={songsList} playSong={playSong} playingIndex={playingIndex} />
+                        )}
+                    </div>
                 </Card>
             </Container>
         </>
     );
 };
 
-const SongsList = ({ songList, playSong = () => {} }) => {
+const SongsList = ({ songList, playSong = () => {}, playingIndex }) => {
     return (
         <div style={{ overflowY: 'scroll', maxHeight: 550 }}>
-            <List sx={{ maxWidth: 360, bgcolor: 'background.paper' }}>
+            <List sx={{ bgcolor: 'background.paper', alignContent: 'center' }}>
                 {songList?.map((song, i) => {
                     let second = song?.duration_ms / 1000;
                     let min = second / 60;
@@ -203,26 +201,29 @@ const SongsList = ({ songList, playSong = () => {} }) => {
                                 playSong(song?.id);
                             }}
                         >
-                            <ListItemAvatar>
-                                <img src={song?.album?.images?.[2]?.url} />
-                            </ListItemAvatar>
-                            <ListItemText
-                                style={{ marginLeft: 10, fontWeight: 'bold', cursor: 'pointer' }}
-                                primary={song?.album?.name}
-                                secondary={
-                                    <React.Fragment>
-                                        <Typography
-                                            sx={{ display: 'inline' }}
-                                            component="span"
-                                            variant="body2"
-                                            color="text.primary"
-                                        >
-                                            {song?.album?.artists?.[0]?.name}
-                                        </Typography>
-                                        <Typography>{`${min?.toFixed(2)} min`}</Typography>
-                                    </React.Fragment>
-                                }
-                            />
+                            <ListItemButton selected={playingIndex === i}>
+                                <ListItemAvatar>
+                                    <img src={song?.album?.images?.[2]?.url} />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    style={{ marginLeft: 10, fontWeight: 'bold', cursor: 'pointer' }}
+                                    primary={song?.album?.name}
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                sx={{ display: 'inline' }}
+                                                component="span"
+                                                variant="body2"
+                                                color="text.primary"
+                                            >
+                                                {song?.album?.artists?.[0]?.name}
+                                            </Typography>
+                                            <Typography>{`${min?.toFixed(2)} min`}</Typography>
+                                        </React.Fragment>
+                                    }
+                                />
+                                <PlayCircleIcon sx={{ width: 60, height: 60, color: '#aaa' }} />
+                            </ListItemButton>
                         </ListItem>
                     );
                 })}
