@@ -81,7 +81,7 @@ export default function PrimarySearchAppBar({ children, to, ...props }) {
                                     className="AppLogo"
                                 /> */}
                                 <h2>    
-                                    Cheer Me Up
+                                    Music on my mind
                                 </h2>
                             </NavLink>
                         </Typography>

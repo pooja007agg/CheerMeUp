@@ -10,6 +10,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 
 import './style.css';
+import { Label } from '@mui/icons-material';
 const videoConstraints = {
     width: 400,
     height: 400,
@@ -20,6 +21,16 @@ const Queue = (props) => {
     const canvasRef = useRef();
     const [faceExpression, setFaceExpression] = useState([]);
     const [songsList, setSongsList] = useState([]);
+    const [audio, setAudio] = useState(null);
+    const [audioId, setAudioId] = useState(null);
+
+    const [playing, setPlaying] = useState(false);
+
+    const toggle = () => setPlaying(!playing);
+
+    useEffect(() => {
+        playing ? audio?.play() : audio?.pause();
+    }, [playing]);
     // const [faceDrawing, setFaceDrawing] = useState([]);
     const webcamRef = useRef();
     // const picturRef = useRef();
@@ -99,6 +110,16 @@ const Queue = (props) => {
         );
     };
 
+    const playSong = (id) => {
+        console.log(id);
+        const songURL = songsList?.find((song) => song?.id === id);
+        setAudioId(id);
+        toggle();
+        setAudio(null);
+        setAudio(new Audio(songURL?.preview_url));
+        
+    };
+
     const captureFaceExpression = () => {
         if (faceExpression) {
             handleSpotifyCall(faceExpression);
@@ -108,9 +129,12 @@ const Queue = (props) => {
     return (
         <>
             <Container sx={{ height: '100vh', display: 'flex' }}>
-                <div style={{ flexDirection: 'row' }}>
+                <div>
                     <Card className="card">
                         <div>
+                            <div>
+                                <p>Are you happy, sad or neutral?</p>
+                            </div>
                             <video
                                 autoPlay
                                 crossOrigin="anonymous"
@@ -130,30 +154,61 @@ const Queue = (props) => {
                                 }}
                                 className="btn btn-danger button"
                             >
-                                Capture
+                                Capture Your Mood
                             </Button>
                         </div>
                     </Card>
-                    {faceExpression}
+                    <Card
+                        style={{
+                            width: 400,
+                            height: 100,
+                            marginTop: 20,
+                            padding: 10,
+                        }}
+                    >
+                        <h3>Your current Expression :</h3>
+                        <h2> {faceExpression}</h2>
+                    </Card>
                 </div>
-                <div>{songsList?.length > 0 && <SongsList songList={songsList} />}</div>
+                <Card
+                    style={{
+                        alignItems: 'center',
+                        width: 800,
+                        height: 620,
+                        marginTop: 20,
+                        marginLeft: 20,
+                        padding: 10,
+                        justifyContent: 'center',
+                    }}
+                >
+                    <h2>Songs According to you current expression: </h2>
+                    <div>{songsList?.length > 0 && <SongsList songList={songsList} playSong={playSong} />}</div>
+                </Card>
             </Container>
         </>
     );
 };
 
-const SongsList = ({ songList }) => {
+const SongsList = ({ songList, playSong = () => {} }) => {
     return (
-        <div>
+        <div style={{ overflowY: 'scroll', maxHeight: 550 }}>
             <List sx={{ maxWidth: 360, bgcolor: 'background.paper' }}>
                 {songList?.map((song, i) => {
+                    let second = song?.duration_ms / 1000;
+                    let min = second / 60;
                     return (
-                        <ListItem alignItems="flex-start">
+                        <ListItem
+                            alignItems="flex-start"
+                            onClick={() => {
+                                playSong(song?.id);
+                            }}
+                        >
                             <ListItemAvatar>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                <img src={song?.album?.images?.[2]?.url} />
                             </ListItemAvatar>
                             <ListItemText
-                                primary="Brunch this weekend?"
+                                style={{ marginLeft: 10, fontWeight: 'bold', cursor: 'pointer' }}
+                                primary={song?.album?.name}
                                 secondary={
                                     <React.Fragment>
                                         <Typography
@@ -162,9 +217,9 @@ const SongsList = ({ songList }) => {
                                             variant="body2"
                                             color="text.primary"
                                         >
-                                            {song?.name}
+                                            {song?.album?.artists?.[0]?.name}
                                         </Typography>
-                                        {" — I'll be in your neighborhood doing errands this…"}
+                                        <Typography>{`${min?.toFixed(2)} min`}</Typography>
                                     </React.Fragment>
                                 }
                             />
