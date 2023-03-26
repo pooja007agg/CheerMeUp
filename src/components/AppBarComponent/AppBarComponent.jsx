@@ -47,24 +47,6 @@ export default function PrimarySearchAppBar({ children, to, ...props }) {
             <li className="nav-link mobile-menu-width">
                 <NavLink to="/queue">Queue</NavLink>
             </li>
-            {/* <li className="nav-link">
-                <NavLink to="/members">Members</NavLink>
-            </li>
-            <li className="nav-link">
-                <NavLink to="/questions">Questions</NavLink>
-            </li>
-            <li className="nav-link">
-                <NavLink to="/offers">Offers</NavLink>
-            </li>
-            <li className="nav-link">
-                <NavLink to="/surveys">Surveys</NavLink>
-            </li>
-            <li className="nav-link">
-                <NavLink to="/settings">Settings</NavLink>
-            </li>
-            <li className="nav-link">
-                <NavLink to="/log-out">Log Out</NavLink>
-            </li> */}
         </Menu>
     );
 
