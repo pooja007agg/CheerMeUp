@@ -193,6 +193,7 @@ const Queue = () => {
                                 mode={'full'}
                                 playIndex={playingIndex}
                                 onPlayIndexChange={handlePlayingIndex}
+                                clearPriorAudioLists
                             />
                         )}
                     </div>
