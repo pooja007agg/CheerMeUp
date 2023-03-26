@@ -118,6 +118,18 @@ const Queue = () => {
         setPlayingIndex(index);
     };
 
+    const getColor = (face) => {
+        if (face === 'happy') {
+            return 'green';
+        } else if (face === 'sad') {
+            return 'yellow';
+        } else if (face === 'angry') {
+            return 'red';
+        } else {
+            return 'white';
+        }
+    };
+
     return (
         <>
             <Container sx={{ height: '100vh', display: 'flex' }}>
@@ -128,9 +140,10 @@ const Queue = () => {
                             height: 100,
                             marginTop: 20,
                             padding: 10,
+                            backgroundColor: getColor(faceExpression),
                         }}
                     >
-                        <h3>Your current Mood</h3>
+                        <h3>Your current mood</h3>
                         <h2>{faceExpression}</h2>
                     </Card>
                     <Card className="card">
@@ -168,7 +181,7 @@ const Queue = () => {
                         justifyContent: 'center',
                     }}
                 >
-                    <h2>Music According to your current mood </h2>
+                    <h2>Music according to your current mood </h2>
                     <div>
                         {songsList?.length > 0 && playingIndex !== null && (
                             <ReactJkMusicPlayer
